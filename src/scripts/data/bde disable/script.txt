@@ -1,3 +1,0 @@
-manage-bde -unlock [C]: -RecoveryPassword 391149-148445-119438-203368-308726-285439-444642-099539
-
-manage-bde -off [C]:
