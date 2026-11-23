@@ -27,6 +27,22 @@ static class Program
     [STAThread]
     static void Main()
     {
+        // Show any startup crash instead of exiting silently.
+        AppDomain.CurrentDomain.UnhandledException += delegate (object s, UnhandledExceptionEventArgs e) { Fail(e.ExceptionObject as Exception); };
+        Application.ThreadException += delegate (object s, ThreadExceptionEventArgs e) { Fail(e.Exception); };
+        try { Start(); }
+        catch (Exception e) { Fail(e); }
+    }
+
+    static void Fail(Exception e)
+    {
+        string msg = e == null ? "Unknown error." : e.ToString();
+        try { File.WriteAllText(Path.Combine(Path.GetTempPath(), "BitLockerUnlock-error.txt"), DateTime.Now + "\r\n" + msg); } catch (Exception) { }
+        MessageBox.Show("BitLocker Unlock hit an error:\n\n" + msg, "BitLocker Unlock", MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
+
+    static void Start()
+    {
         if (!IsAdmin())
         {
             // The release build has a requireAdministrator manifest; this covers builds without one.
@@ -37,9 +53,9 @@ static class Program
                 psi.Verb = "runas";
                 Process.Start(psi);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                MessageBox.Show("This tool needs administrator rights to unlock and decrypt drives.",
+                MessageBox.Show("This tool needs administrator rights to unlock and decrypt drives.\n\n" + e.Message,
                     "BitLocker Unlock", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return;
