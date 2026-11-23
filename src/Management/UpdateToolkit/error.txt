@@ -1,6 +1,0 @@
-=== ISOs (check only) ===
-usage: update_isos.py [-h] [--root ROOT] [--list] [--force] [only ...]
-update_isos.py: error: no ISO folder under D:" --list (use --root)
-=== Tools (check only) ===
-usage: update_tools.py [-h] [--root ROOT] [--list] [--force] [only ...]
-update_tools.py: error: no Programs folder under D:" --list (use --root)

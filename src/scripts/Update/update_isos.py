@@ -23,7 +23,7 @@ Usage:
     python update_isos.py --dry-run              same as --list, never downloads
 
 Needs Python 3.8+ and nothing else (standard library only).
-Versions are logged to Scripts\\Update\\ver.log, section [ISO], and compared with the
+Versions are logged to src\\scripts\\Update\\ver.log, section [ISO], and compared with the
 latest online version on the next run.
 Downloads go to "<name>.part" first, are checksum-verified where the vendor
 publishes a checksum, and only then replace the old ISO.

@@ -21,7 +21,7 @@ from http.cookiejar import CookieJar
 # ----------------------------------------------------------------------------
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
+DEFAULT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", ".."))   # src\scripts\Update -> drive root
 
 # Machine-readable mode (--machine): used by the GUI. Besides normal text lines the modules print
 #   @@ENTRY|index|count|key|name      an entry is starting

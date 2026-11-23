@@ -1,2 +1,2 @@
 # Files over GitHub's 100 MB limit are stored with Git LFS
-Programs/reflect_setup_free_x64.exe filter=lfs diff=lfs merge=lfs -text
+src/programs/reflect_setup_free_x64.exe filter=lfs diff=lfs merge=lfs -text

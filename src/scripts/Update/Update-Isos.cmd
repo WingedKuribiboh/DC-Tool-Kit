@@ -4,7 +4,7 @@
 ::   Update-Isos.cmd --list     only show status
 ::   Update-Isos.cmd ubuntu     only that entry
 :: Uses an installed Python if there is one; otherwise fetches a portable
-:: Python (about 11 MB, from python.org) into Scripts\Update\python\ once.
+:: Python (about 11 MB, from python.org) into src\scripts\Update\python\ once.
 setlocal
 set "HERE=%~dp0"
 set "PY="
