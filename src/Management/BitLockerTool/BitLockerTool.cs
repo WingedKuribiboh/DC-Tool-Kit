@@ -163,7 +163,7 @@ class MainForm : Form
         Controls.Add(lblKey);
 
         btnBegin = new Button();
-        btnBegin.Text = "Begin";
+        btnBegin.Text = "Decrypt!";
         btnBegin.Location = new Point(12, 90);
         btnBegin.Size = new Size(120, 32);
         btnBegin.Click += delegate { Begin(); };
