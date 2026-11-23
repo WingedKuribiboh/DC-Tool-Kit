@@ -1,0 +1,132 @@
+﻿{
+    "control":  [
+                    {
+                        "VTOY_DEFAULT_MENU_MODE":  "1"
+                    },
+                    {
+                        "VTOY_DEFAULT_SEARCH_ROOT":  "/ISO"
+                    },
+                    {
+                        "VTOY_FILT_DOT_UNDERSCORE_FILE":  "1"
+                    }
+                ],
+    "theme":  {
+                  "file":  "/ventoy/theme/bsol/theme.txt",
+                  "gfxmode":  "1920x1080"
+              },
+    "menu_alias":  [
+                       {
+                           "dir":  "/ISO/1-Windows Install",
+                           "alias":  "1 - Windows Installers"
+                       },
+                       {
+                           "dir":  "/ISO/2-Linux Install",
+                           "alias":  "2 - Linux Installers / Live"
+                       },
+                       {
+                           "dir":  "/ISO/3-Repair",
+                           "alias":  "3 - Repair \u0026 Recovery"
+                       },
+                       {
+                           "image":  "/ISO/1-Windows Install/Win11_x64.iso",
+                           "alias":  "Windows 11 - x64 (Intel / AMD)"
+                       },
+                       {
+                           "image":  "/ISO/1-Windows Install/Win11_arm.iso",
+                           "alias":  "Windows 11 - ARM64 (Snapdragon only)"
+                       },
+                       {
+                           "image":  "/ISO/2-Linux Install/ubuntu.iso",
+                           "alias":  "Ubuntu Desktop - Live / Install"
+                       },
+                       {
+                           "image":  "/ISO/2-Linux Install/Fedora.iso",
+                           "alias":  "Fedora Workstation - Live / Install"
+                       },
+                       {
+                           "image":  "/ISO/3-Repair/HBCD_PE_x64.iso",
+                           "alias":  "Hiren\u0027s BootCD PE - Windows repair toolkit"
+                       },
+                       {
+                           "image":  "/ISO/3-Repair/shredos.iso",
+                           "alias":  "ShredOS - SECURE DISK WIPE (destroys data)"
+                       },
+                       {
+                           "image":  "/ISO/3-Repair/Memtest86plus.iso",
+                           "alias":  "Memtest86+ - RAM test"
+                       }
+                   ],
+    "menu_tip":  {
+                     "left":  "10%",
+                     "top":  "85%",
+                     "color":  "yellow",
+                     "tips":  [
+                                  {
+                                      "image":  "/ISO/1-Windows Install/Win11_x64.iso",
+                                      "tip":  "Clean install or in-place repair of Windows 11 on standard Intel/AMD PCs. Enter the customer\u0027s license or use the one in firmware."
+                                  },
+                                  {
+                                      "image":  "/ISO/1-Windows Install/Win11_arm.iso",
+                                      "tip":  "ARM64 devices only (Snapdragon laptops). Will NOT boot on Intel/AMD PCs."
+                                  },
+                                  {
+                                      "image":  "/ISO/2-Linux Install/ubuntu.iso",
+                                      "tip":  "Live desktop: try without installing, browse/copy files off a dead Windows install, or install Ubuntu."
+                                  },
+                                  {
+                                      "image":  "/ISO/2-Linux Install/Fedora.iso",
+                                      "tip":  "Live desktop: try without installing, recover files, or install Fedora Workstation."
+                                  },
+                                  {
+                                      "image":  "/ISO/3-Repair/HBCD_PE_x64.iso",
+                                      "tip":  "Windows PE toolkit: password reset, disk/partition tools, backup/imaging, malware scan, driver tools. Needs a 64-bit UEFI PC."
+                                  },
+                                  {
+                                      "image":  "/ISO/3-Repair/shredos.iso",
+                                      "tip":  "DANGER: nwipe-based secure erase. Wipes whole drives permanently. Use only for decommissioning; double-check the target disk."
+                                  },
+                                  {
+                                      "image":  "/ISO/3-Repair/Memtest86plus.iso",
+                                      "tip":  "RAM diagnostic. Let it finish at least 1-2 full passes; any error means bad RAM or slot. Non-destructive."
+                                  }
+                              ]
+                 },
+    "menu_class":  [
+                       {
+                           "dir":  "/ISO/1-Windows Install",
+                           "class":  "windows"
+                       },
+                       {
+                           "dir":  "/ISO/2-Linux Install",
+                           "class":  "linux"
+                       },
+                       {
+                           "dir":  "/ISO/3-Repair",
+                           "class":  "recovery"
+                       },
+                       {
+                           "key":  "Win11",
+                           "class":  "windows11"
+                       },
+                       {
+                           "key":  "ubuntu",
+                           "class":  "ubuntu"
+                       },
+                       {
+                           "key":  "Fedora",
+                           "class":  "fedora"
+                       },
+                       {
+                           "key":  "HBCD",
+                           "class":  "windows"
+                       },
+                       {
+                           "key":  "shredos",
+                           "class":  "recovery"
+                       },
+                       {
+                           "key":  "Memtest",
+                           "class":  "memtest"
+                       }
+                   ]
+}

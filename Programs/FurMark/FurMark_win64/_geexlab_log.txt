@@ -1,0 +1,102 @@
+10:42:46:239(0000001)	[info ]	GeeXLab Player v0.67.2.0
+10:42:46:239(0000002)	[info ]	Build date: Oct 30 2026@16:24:12
+10:42:46:239(0000003)	[info ]	Scriptable Proto-Engine (Lua, Python, GLSL, OpenGL, Vulkan)
+10:42:46:239(0000004)	[info ]	(C)2009-2026 Geeks3D
+10:42:46:239(0000005)	[info ]	Homepage: https://geeks3d.com/geexlab/
+10:42:46:239(0000006)	[info ]	Discord server: https://www.geeks3d.com/discord/
+10:42:46:239(0000007)	[info ]	GeeXLab Player is starting up...
+10:42:46:244(0000008)	[info ]	[stb] STB image loader. Supported formats: *.JPEG, *.PNG, *.TGA, *.BMP, *.PSD, *.GIF, *.HDR, *.PIC
+10:42:46:244(0000009)	[info ]	[tinyexr] EXR image loader.
+10:42:46:244(0000010)	[info ]	[lib3ds] Lib3ds loader (core plugin).
+10:42:46:244(0000011)	[info ]	[ObjLoaderV1] OBJ 3D loader (core plugin).
+10:42:46:244(0000012)	[info ]	[ObjLoaderV2] OBJ loader based on Tiny OBJ Loader (core plugin).
+10:42:46:244(0000013)	[info ]	[STL] STL (StereoLithography) 3D loader (core plugin).
+10:42:46:244(0000014)	[info ]	[glTF] glTF 3D loader (core plugin).
+10:42:46:244(0000015)	[info ]	[SQLite3] SQLite3 version 3.54.1
+10:42:46:244(0000016)	[info ]	GraphX Core 0.62.1.0 (codename: Dirac) initialization ok.
+10:42:46:244(0000017)	[info ]	GeeXLab home directory: E:\Tools\Benchmark\data\FurMark\FurMark_win64\
+10:42:46:244(0000018)	[info ]	Windows version: Windows 11 build 26200
+10:42:46:244(0000019)	[info ]	SW platform type: Windows 64-bit
+10:42:46:428(0000020)	[info ]	Plugins search path: E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/;E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/physx5/;E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/physx4/;E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/physx3/;E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/ffmpeg/;E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/assimp/;E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/imagemagick/;E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/fmod/;E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/python/;E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/flex/;E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/freeimage/;E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/openvr/;E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/leap/;E:\Tools\Benchmark\data\FurMark\FurMark_win64\plugins/anttweakbar/;
+10:42:46:428(0000021)	[info ]	Current user: CashBash
+10:42:46:428(0000022)	[info ]	Python 3.7 home: [C:/Users/CashBash/AppData/Local/Programs/Python/Python37/]
+10:42:46:428(0000023)	[info ]	Python 3.8 home: [C:/Users/CashBash/AppData/Local/Programs/Python/Python38/]
+10:42:46:428(0000024)	[info ]	Python 3.9 home: [C:/Users/CashBash/AppData/Local/Programs/Python/Python39/]
+10:42:46:428(0000025)	[info ]	Python 3.10 home: [C:/Users/CashBash/AppData/Local/Programs/Python/Python310/]
+10:42:46:428(0000026)	[info ]	Python 3.11 home: [C:/Users/CashBash/AppData/Local/Programs/Python/Python311/]
+10:42:46:428(0000027)	[info ]	Python 3.12 home: [C:/Users/CashBash/AppData/Local/Programs/Python/Python312/]
+10:42:46:428(0000028)	[info ]	Python 3.13 home: [C:/Users/CashBash/AppData/Local/Programs/Python/Python313/]
+10:42:46:428(0000029)	[info ]	Python 3.14 home: [C:/Users/CashBash/AppData/Local/Programs/Python/Python314/]
+10:42:46:428(0000030)	[info ]	App directory: E:\Tools\Benchmark\data\FurMark\FurMark_win64\
+10:42:46:428(0000031)	[info ]	Scripting libs directory: E:\Tools\Benchmark\data\FurMark\FurMark_win64\libs\
+10:42:46:485(0000032)	[info ]	[GpuMonitor] Operating system detected: Windows 11 build 26200
+10:42:46:523(0000033)	[info ]	[GpuMonitor] Intel - num adapters: 1 
+10:42:46:526(0000034)	[info ]	[GpuMonitor]       - driver version: 32.0.101.7088
+10:42:46:526(0000035)	[info ]	[GpuMonitor]       - firmware version: 17.0.1073
+10:42:46:526(0000036)	[info ]	[GpuMonitor]       - frequency: 1450
+10:42:46:526(0000037)	[info ]	[GpuMonitor]       - GPU configuration:
+10:42:46:526(0000038)	[info ]	[GpuMonitor]       -   Intel(R) UHD Graphics 730
+10:42:46:526(0000039)	[info ]	[GpuMonitor]       -   1 Xe cores
+10:42:46:526(0000040)	[info ]	[GpuMonitor]       -   24 EUs
+10:42:46:526(0000041)	[info ]	[GpuMonitor]       -   1 slices / 2 sub slices per slice / 12 EUs per sub slice
+10:42:46:526(0000042)	[info ]	[GpuMonitor]       -   192 ALUs
+10:42:46:526(0000043)	[info ]	[GpuMonitor]       -   0 ray tracing cores
+10:42:46:526(0000044)	[info ]	[GpuMonitor]       - Resizable bar: supported: NO
+10:42:46:526(0000045)	[info ]	[GpuMonitor]       - ctlEnumMemoryModules - MemoryHandlerCount: 1
+10:42:46:896(0000046)	[info ]	[GpuMonitor]       - VRAM type: _UNKNOWN_
+10:42:46:896(0000047)	[info ]	[GpuMonitor]       - VRAM size: 8036 MB
+10:42:46:975(0000048)	[info ]	[GpuMonitor] Num GPUs detected: 1
+10:42:46:975(0000049)	[info ]	[GpuMonitor] > GPU0
+10:42:46:975(0000050)	[info ]	[GpuMonitor]   - name: Intel(R) UHD Graphics 730
+10:42:46:975(0000051)	[info ]	[GpuMonitor]   - PCI codes: 0x8086-0x4692
+10:42:46:975(0000052)	[info ]	[GpuMonitor]   - Bus ID: 0
+10:42:46:975(0000053)	[info ]	[GpuMonitor]   - VBIOS: 17.0.1073
+10:42:46:975(0000054)	[info ]	[GpuMonitor]   - driver: 32.0.101.7088
+10:42:47:006(0000055)	[info ]	================================================================================
+10:42:47:012(0000056)	[info ]	monitor DPI: [144, 144] - DPI scale: 1.50 - new window size: 810 x 1080
+10:42:47:012(0000057)	[info ]	current DPI: xdpi(144), ydpi(144) - DPI scaling: 1.5
+10:42:47:044(0000058)	[info ]	Geeks3D FurMark - demo started with an OpenGL 4.6 context.
+10:42:47:044(0000059)	[info ]	Quick OpenGL information (use /glinfo for more limits):
+10:42:47:044(0000060)	[info ]	GL_RENDERER: Intel(R) UHD Graphics 730
+10:42:47:044(0000061)	[info ]	GL_VENDOR: Intel
+10:42:47:044(0000062)	[info ]	GL_VERSION: 4.6.0 - Build 32.0.101.7088
+10:42:47:044(0000063)	[info ]	GL_SHADING_LANGUAGE_VERSION: 4.60 - Build 32.0.101.7088
+10:42:47:044(0000064)	[info ]	OpenGL version detected: 4.6
+10:42:47:044(0000065)	[info ]	OpenGL extensions: 269
+10:42:47:044(0000066)	[info ]	OpenGL hardware limits:
+10:42:47:044(0000067)	[info ]	  GL_MAX_VERTEX_ATTRIBS: 16
+10:42:47:044(0000068)	[info ]	  GL_MAX_VERTEX_UNIFORM_COMPONENTS: 4096
+10:42:47:044(0000069)	[info ]	  GL_MAX_FRAGMENT_UNIFORM_COMPONENTS: 4096
+10:42:47:044(0000070)	[info ]	  GL_MAX_TEXTURE_SIZE: 16384
+10:42:47:044(0000071)	[info ]	  GL_MAX_VIEWPORT_DIMS: 16384 16384
+10:42:47:044(0000072)	[info ]	  GL_MAX_TEXTURE_IMAGE_UNITS: 32
+10:42:47:044(0000073)	[info ]	  GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS: 192
+10:42:47:044(0000074)	[info ]	Render window (Geeks3D FurMark) initialized (renderer type: OpenGL)
+10:42:47:100(0000075)	[info ]	[Lua] Lua version: Lua 5.5.1
+10:42:47:104(0000076)	[info ]	[Lua] LuaFileSystem initialized ok.
+10:42:47:104(0000077)	[info ]	[Lua] UTF8 initialized ok.
+10:42:47:104(0000078)	[info ]	[Lua] LuaSocket core initialized ok.
+10:42:47:104(0000079)	[info ]	[Lua] Mime core initialized ok.
+10:42:47:104(0000080)	[info ]	[Lua] LuaSQL SQLite3 driver initialized ok.
+10:42:47:104(0000081)	[info ]	[Lua] initialization ok.
+10:42:47:121(0000082)	[info ]	Scene compilation: SUCCESS.
+10:42:47:165(0000083)	[info ]	screen size detected: 1920 x 1080
+10:42:49:076(0000084)	[info ]	FurMark 2.11.0.4 is starting up...
+10:42:49:079(0000085)	[info ]	DPI scale: 1.5
+10:42:49:079(0000086)	[info ]	Checking for new version...
+10:42:49:568(0000087)	[info ]	Your version is up to date
+10:42:49:856(0000088)	[info ]	[Vulkan2] Vulkan renderer plugin (Windows, Linux)
+10:42:50:007(0000089)	[info ]	[Vulkan2] instance API version: 4198400 (Vulkan 1.1)
+10:42:50:030(0000090)	[info ]	[Vulkan2] [ GPU 0 ]--------------------------------------
+10:42:50:030(0000091)	[info ]	[Vulkan2] - name: Intel(R) UHD Graphics 730
+10:42:50:030(0000092)	[info ]	[Vulkan2] - PCI-ID: 8086-4692
+10:42:50:030(0000093)	[info ]	[Vulkan2] - Vulkan API version: 1.4.323
+10:42:50:030(0000094)	[info ]	[Vulkan2] - Device extensions: 148
+10:42:50:120(0000095)	[info ]	- GPU 0: Intel(R) UHD Graphics 730
+10:42:50:120(0000096)	[info ]	scripts INIT execution: OK.
+10:42:52:583(0000097)	[info ]	Scene statistics:
+10:42:52:583(0000098)	[info ]	- 127 frames rendered during 2.464 seconds
+10:42:52:583(0000099)	[info ]	- average framerate: 51.5 FPS
+10:42:52:650(0000100)	[info ]	Stopping GeeXLab Player...
+10:42:53:384(0000101)	[info ]	GraphX Core stopped ok.
+10:42:53:384(0000102)	[info ]	Exit from GeeXLab Player.
