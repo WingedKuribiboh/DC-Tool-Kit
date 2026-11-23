@@ -1,0 +1,20 @@
+# macOS / Windows junk
+.DS_Store
+._*
+Thumbs.db
+desktop.ini
+
+# Python
+__pycache__/
+*.pyc
+
+# Boot images are too big for git; fetched by Scripts/Update/Update-Isos.cmd
+ISO/**/*.iso
+
+# Secrets and customer data
+key.txt
+Scripts/data/
+Reports/
+
+# Build output / logs
+Management/UpdateToolkit/error.txt
