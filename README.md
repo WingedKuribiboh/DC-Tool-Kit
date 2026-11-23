@@ -1,80 +1,55 @@
-# DC Tool Kit
+﻿# IT Toolkit Drive
 
-IT toolkit for the DC techs. It lives on a Ventoy multiboot USB stick: boot the stick for installer and rescue ISOs, or open it in Windows for the tools and scripts. This repo is the master copy used to push updates out to every tech's stick.
+Ventoy multiboot stick. Boot it for installers/rescue ISOs; open it in Windows for tools and scripts.
 
 ## Layout
-
-```
-DC-Tool-Kit/
-├── ISO/                  Boot images (not in the repo; see below)
-├── Tools/                Launchers, grouped by job
-│   ├── Malware Scans/
-│   ├── Storage/
-│   ├── Stress Test/
-│   └── Utilities/
-├── src/
-│   ├── programs/         The real programs the launchers open
-│   ├── scripts/
-│   │   ├── Windows/      Diagnostics and repair scripts
-│   │   ├── BitLocker/    Unlock-And-Disable.ps1
-│   │   └── Update/       ISO and program updaters, bundled Python, ver.log
-│   └── Management/       Helper apps: ITToolkit, UpdateToolkit, LauncherMaker_v2.exe
-└── ventoy/               ventoy.json and the boot menu theme
-```
-
-| Folder | Contents |
+| Path | Contents |
 |---|---|
-| `ISO/` | Boot images, in `1-Windows Install`, `2-Linux Install` and `3-Repair`. **Not stored in this repo** (about 30 GB). Fetch them with `src/scripts/Update/Update-Isos.cmd`. Ventoy only scans this folder (`VTOY_DEFAULT_SEARCH_ROOT`). |
-| `Tools/` | Small launcher `.exe` files (about 5 KB each, made with `LauncherMaker_v2.exe`). Each one opens the real program at a fixed path, so don't rename anything. |
-| `src/programs/` | The portable programs and installers that the launchers open. Only some of them are committed (DDU, FurMark, JRT, rkill, MiniTool Partition Wizard). The rest are downloaded by `Update-Tools.cmd`. |
-| `src/scripts/Windows/` | `System-Report.ps1`, `Disk-Health.ps1`, `Network-Diag.ps1`, `Repair-Windows.cmd` (DISM/SFC) and `Reset-WindowsUpdate.cmd`. |
-| `src/scripts/BitLocker/` | `Unlock-And-Disable.ps1`. Reads the recovery password from `key.txt` next to the script and wipes `key.txt` when it finishes. |
-| `src/scripts/Update/` | `update_isos.py` and `update_tools.py` (plus `updlib.py`), their `.cmd` wrappers, a bundled embeddable Python 3.12 in `python/`, and `ver.log`, which records installed versions. |
-| `src/Management/` | Source (C#) and builds of `ITToolkit` and `UpdateToolkit`, plus `LauncherMaker_v2.exe` for making new launchers. Each app has a `build.bat` that uses the `csc.exe` built into Windows, so no SDK is needed. |
-| `ventoy/` | `ventoy.json` (menu names, tips and icon classes) and the `bsol` theme. **This folder must stay at the root of the stick**, or Ventoy won't load the config. |
+| `ISO\1-Windows Install` | `Win11_x64.iso`, `Win11_arm.iso` (ARM64 = Snapdragon only) |
+| `ISO\2-Linux Install` | `ubuntu.iso`, `Fedora.iso` (live/install) |
+| `ISO\3-Repair` | Hiren's BootCD PE (`HBCD_PE_x64.iso`), Memtest86+, SystemRescue, ShredOS (secure wipe - destructive) |
+| `Tools\` | Click-to-run launchers (see below) |
+| `src\Programs` | The actual portable programs the launchers point to |
+| `src\Scripts` | `BitLocker\` (unlock script) and `Update\` (ISO / tool updaters) |
+| `src\Management` | C# source + `build.bat` for the GUI tools, and `LauncherMaker_v2.exe` |
+| `Reports` | Output from scripts, one folder per machine |
+| `ventoy\ventoy.json` | Boot menu names, tooltips, theme (`ventoy\theme\bsol`) |
+| `key.txt` (drive root, created on demand) | BitLocker recovery key hand-off file; wiped after use |
 
-## Boot menu
+### Tools (launchers)
+Each `.exe` in `Tools\` is a small stub that starts a program in `src\Programs\` at a fixed path, so keep that layout intact.
 
-| Menu entry | File |
+| Folder | Launchers |
 |---|---|
-| Windows 11 x64 | `ISO/1-Windows Install/Win11_x64.iso` |
-| Windows 11 ARM64 (Snapdragon only) | `ISO/1-Windows Install/Win11_arm.iso` |
-| Ubuntu Desktop (live / install) | `ISO/2-Linux Install/ubuntu.iso` |
-| Fedora Workstation (live / install) | `ISO/2-Linux Install/Fedora.iso` |
-| Hiren's BootCD PE | `ISO/3-Repair/HBCD_PE_x64.iso` |
-| ShredOS (secure disk wipe) | `ISO/3-Repair/shredos.iso` |
-| Memtest86+ | `ISO/3-Repair/Memtest86plus.iso` |
-| SystemRescue (no alias yet, shows as the file name) | `ISO/3-Repair/systemrescue.iso` |
+| `Tools\BitLocker` | **BitLocker Unlock.exe** - GUI to unlock with a recovery password and decrypt (real tool, not a stub) |
+| `Tools\Storage` | Hard Disk Sentinel, Macrium Reflect (installer), MiniTool Partition Wizard (installer), Rufus, Samsung Magician (installer), WinDirStat |
+| `Tools\Malware Scans` | Adlice Protect (RogueKiller), AdwCleaner, Autoruns, Junkware Removal Tool, Malwarebytes (installer), Revo Uninstaller, rkill |
+| `Tools\Stress Test` | FurMark, FurMark (GUI), Prime95 |
+| `Tools\Utilities` | 7-Zip File Manager, Display Driver Uninstaller (run in Safe Mode), Everything, Notepad++, PuTTY |
 
-The updater always saves each image under the same file name, so the names, tips and icons in `ventoy.json` keep working after an update.
+`src\Programs` also holds the full Sysinternals Suite (no launcher; run from there).
 
-## Using the stick
+## GUI tools (`src\Management`)
+All three build with the `csc.exe` that ships with Windows (.NET Framework 4.x, no SDK): run `build.bat` in the tool's folder.
 
-- **Boot a machine from it:** pick an image from the Ventoy menu. Each entry shows a tip at the bottom of the screen.
-- **In Windows:** open `Tools\` for the programs or `src\scripts\` for the scripts. Run scripts as administrator.
-- **Add an ISO:** put it in the right `ISO\` subfolder, then add an `alias`, `tip` and `class` entry for it in `ventoy\ventoy.json`.
-- **Update ISOs:** run `src\scripts\Update\Update-Isos.cmd` (add `--list` to only check, or name entries such as `ubuntu shredos` to update only those).
-- **Update programs:** run `src\scripts\Update\Update-Tools.cmd` (it takes the same options). Programs that can't be auto-updated are listed under `[Skipped]` in `ver.log`.
-- **GUI updater:** `src\Management\UpdateToolkit\UpdateToolkit.exe`. It runs the same two scripts and shows their progress.
+- **ITToolkit** (`ITToolkit\ITToolkit.exe`) - DISM / SFC / CHKDSK repair, disk health, network diagnostics, UEFI/boot (ESP) tools and system info. Works on the running OS or an offline Windows drive (`/target:D:`). Auto-elevates. Command line: `/target`, `/source` (e.g. `wim:E:\sources\install.wim:1`), `/scratch`, `/run:<id>[,<id>]`, `/log`, `/exit`, `/list` (shows tool ids), `/help`. Example: `ITToolkit.exe /target:D: /run:full-repair /log:E:\repair.log /exit`
+- **UpdateToolkit** (`UpdateToolkit\UpdateToolkit.exe`) - GUI with progress bars for the two updaters below. Args: `all|isos|tools` to start immediately, `/check` (download nothing), `/force`, `/root:X:\`.
+- **BitLockerTool** - source for `Tools\BitLocker\BitLocker Unlock.exe` (its `build.bat` writes there).
+- **LauncherMaker_v2.exe** - generates the stub launchers in `Tools\`.
 
-Both `.cmd` updaters use an installed Python 3.8+ if one exists. Otherwise they fall back to the bundled one in `src\scripts\Update\python\`.
+## Use
+- Boot: pick the stick in the BIOS/UEFI boot menu; ISOs are listed by folder.
+- Adding an ISO: drop it in the right `ISO\` subfolder, then add an `alias` and `tip` entry for it in `ventoy\ventoy.json`.
+- Keep ISOs current: `src\Scripts\Update\Update-Isos.cmd` (`--list` to only check, or name one entry, e.g. `ubuntu`). Covers Windows 11, Ubuntu, Fedora, Hiren's, ShredOS, Memtest86+, SystemRescue; keeps the filenames above. Uses an installed Python (3.8+) or downloads a portable one into `src\Scripts\Update\python` on first run.
+- Keep portable programs current: `src\Scripts\Update\Update-Tools.cmd` (same options). Updates 7-Zip, WinDirStat, Revo, HD Sentinel, Adlice, Malwarebytes, Notepad++, AdwCleaner, Sysinternals, Everything, PuTTY, Prime95, Rufus, Samsung Magician in place. DDU, FurMark, JRT, MiniTool, Macrium and rkill are not auto-updated.
+- Versions are tracked in `src\Scripts\Update\ver.log` (`[ISO]`, `[Tools]`, `[Skipped]`).
+- BitLocker: on another machine paste the 48-digit recovery password into `key.txt` at the drive root (e.g. `E:\key.txt`), then run `Tools\BitLocker\BitLocker Unlock.exe` (or `src\Scripts\BitLocker\Unlock-And-Disable.ps1 -Drive C:` as admin) on the locked machine. `key.txt` is overwritten and emptied right after the unlock attempt.
 
-## Getting repo updates onto a stick
+## Rules
+- No customer data, passwords or BitLocker keys on this drive. If you must copy something off a customer machine, delete it afterward.
+- ShredOS erases entire disks. Verify the target.
+- `Tools\` launchers depend on exact paths in `src\Programs`; the updaters preserve them, so don't rename folders there.
 
-1. Clone this repo, or `git pull` if you already have it.
-2. Copy the **contents** of the repo onto the stick's data partition root, over the existing files. `ventoy/` and `ISO/` have to end up at the top level of the stick.
-3. Run `Update-Tools.cmd` to fetch the programs that aren't in the repo.
-4. Run `Update-Isos.cmd` to download the ISOs.
-
-## Contributing
-
-- Make changes on a branch and open a pull request. Don't push to `main` directly.
-- Keep the folder and file names that the launchers, `ventoy.json` and the updaters rely on (see the notes at the top of `src/scripts/Update/update_tools.py` and `update_isos.py`).
-- Don't commit ISOs, customer data, passwords or BitLocker recovery keys. Check `git status` before committing anything from `src/scripts/data/` or a `key.txt`.
-- Files over 100 MB are rejected by GitHub unless they go through Git LFS. Add new ones to `.gitattributes` before committing.
-
-## Safety
-
-- ShredOS erases entire disks. Verify the target before running it.
-- Run DDU (GPU driver removal) in Safe Mode.
-- Never leave customer data or recovery keys on a stick. If you copy something off a customer machine, delete it afterward.
+## Housekeeping
+- macOS leaves `._*` files and `.Spotlight-V100`, `.fseventsd`, `.Trashes` on the stick. Ventoy ignores `._*` (`VTOY_FILT_DOT_UNDERSCORE_FILE`); they are safe to delete.
+- `src\Management\UpdateToolkit\error.txt` is a stale log from a bad `/root` argument and can be deleted.
