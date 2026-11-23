@@ -18,3 +18,4 @@ Reports/
 
 # Build output / logs
 Management/UpdateToolkit/error.txt
+.DS_Store
