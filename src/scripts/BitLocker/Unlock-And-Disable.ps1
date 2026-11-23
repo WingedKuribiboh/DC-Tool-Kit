@@ -2,13 +2,13 @@
   Unlock-And-Disable.ps1 - unlock a BitLocker volume with its recovery password, then decrypt it.
   Run as admin.
 
-  Workflow: on another machine, paste the 48-digit recovery password into key.txt (next to this script),
+  Workflow: on another machine, paste the 48-digit recovery password into key.txt at the ROOT of the stick (e.g. E:\key.txt),
   then run this on the locked machine. key.txt is wiped when the script finishes, pass or fail.
   Usage: .\Unlock-And-Disable.ps1 [-Drive C:]
 #>
 param([string]$Drive = 'C:')
 
-$keyFile = Join-Path $PSScriptRoot 'key.txt'
+$keyFile = Join-Path ([IO.Path]::GetPathRoot($PSScriptRoot)) 'key.txt'   # same file the GUI (Tools\BitLocker) uses
 if (-not (Test-Path $keyFile)) { New-Item $keyFile -ItemType File | Out-Null }
 
 try {
