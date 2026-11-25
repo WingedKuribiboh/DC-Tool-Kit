@@ -21,7 +21,29 @@ from http.cookiejar import CookieJar
 # ----------------------------------------------------------------------------
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
+
+# Drive layout (all relative to the drive root):
+#   ISO\...                 boot images          (update_isos.py)
+#   src\Programs\...        portable programs    (update_tools.py; Tools\*.exe launchers point here)
+#   src\Scripts\Update\     these scripts + ver.log
+PROGRAMS_DIR = os.path.join("src", "Programs")
+
+
+def _find_root():
+    """Drive root = the folder above src\\ that holds ISO\\ / ventoy\\. These scripts live in
+    <root>\\src\\Scripts\\Update, so walk up from here; fall back to three levels up."""
+    d = SCRIPT_DIR
+    while True:
+        if os.path.isdir(os.path.join(d, "src")) and (
+                os.path.isdir(os.path.join(d, "ISO")) or os.path.isdir(os.path.join(d, "ventoy"))):
+            return d
+        parent = os.path.dirname(d)
+        if parent == d:
+            return os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", ".."))
+        d = parent
+
+
+DEFAULT_ROOT = _find_root()
 
 # Machine-readable mode (--machine): used by the GUI. Besides normal text lines the modules print
 #   @@ENTRY|index|count|key|name      an entry is starting

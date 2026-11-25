@@ -8,14 +8,14 @@ desktop.ini
 __pycache__/
 *.pyc
 
-# Boot images are too big for git; fetched by Scripts/Update/Update-Isos.cmd
+# Boot images are too big for git; fetched by src/Scripts/Update/Update-Isos.cmd
 ISO/**/*.iso
 
 # Secrets and customer data
 key.txt
-Scripts/data/
+src/Scripts/data/
 Reports/
 
 # Build output / logs
-Management/UpdateToolkit/error.txt
+src/UpdateToolkit/error.txt
 .DS_Store

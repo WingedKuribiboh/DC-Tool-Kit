@@ -23,7 +23,7 @@ Usage:
     python update_isos.py --dry-run              same as --list, never downloads
 
 Needs Python 3.8+ and nothing else (standard library only).
-Versions are logged to Scripts\\Update\\ver.log, section [ISO], and compared with the
+Versions are logged to src\\Scripts\\Update\\ver.log, section [ISO], and compared with the
 latest online version on the next run.
 Downloads go to "<name>.part" first, are checksum-verified where the vendor
 publishes a checksum, and only then replace the old ISO.
@@ -386,7 +386,7 @@ def main(argv=None):
     if bad:
         ap.error("unknown entries: %s (valid: %s)" % (", ".join(bad), ", ".join(sorted(keys))))
     if not os.path.isdir(os.path.join(args.root, "ISO")):
-        ap.error("no ISO folder under %s (use --root)" % args.root)
+        ap.error("no ISO folder under %s (use --root with the drive root)" % args.root)
 
     state = load_state()
     todo = [e for e in CATALOG if not args.only or e["key"] in args.only]

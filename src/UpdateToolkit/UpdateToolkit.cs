@@ -1,4 +1,4 @@
-// Update Toolkit - GUI front end for the toolkit update modules (Scripts\Update\update_isos.py,
+// Update Toolkit - GUI front end for the toolkit update modules (src\Scripts\Update\update_isos.py,
 // update_tools.py). It runs the scripts, reads their progress output and shows it as progress bars.
 // Targets .NET Framework 4.5+ / C# 5 so it builds with the csc.exe that ships with Windows.
 //
@@ -128,7 +128,7 @@ class MainForm : Form
             else if (l == "all" || l == "isos" || l == "tools") run = l;
         }
         SetRoot(rootArg != null ? rootArg : FindRoot());
-        if (root == null) AppendLog("Could not find the toolkit drive (Scripts\\Update\\update_isos.py). Click \"Change...\" and pick the drive root.\n", Color.DarkRed);
+        if (root == null) AppendLog("Could not find the toolkit drive (src\\Scripts\\Update\\update_isos.py). Click \"Change...\" and pick the drive root.\n", Color.DarkRed);
 
         if (run != null && root != null)
         {
@@ -152,9 +152,12 @@ class MainForm : Form
 
     // ---------------------------------------------------------------- root
 
+    // The updater scripts live in <drive root>\src\Scripts\Update.
+    static readonly string UpdSubDir = Path.Combine("src", Path.Combine("Scripts", "Update"));
+
     static bool IsRoot(string dir)
     {
-        return File.Exists(Path.Combine(dir, Path.Combine("Scripts", Path.Combine("Update", "update_isos.py"))));
+        return File.Exists(Path.Combine(dir, Path.Combine(UpdSubDir, "update_isos.py")));
     }
 
     static string FindRoot()
@@ -175,7 +178,7 @@ class MainForm : Form
         {
             root = r.TrimEnd('\\', '/');
             if (root.Length == 2 && root[1] == ':') root += "\\";
-            updDir = Path.Combine(root, Path.Combine("Scripts", "Update"));
+            updDir = Path.Combine(root, UpdSubDir);
             lblRoot.Text = "Toolkit drive: " + root;
         }
         else
@@ -189,10 +192,10 @@ class MainForm : Form
     {
         using (FolderBrowserDialog f = new FolderBrowserDialog())
         {
-            f.Description = "Select the toolkit drive (the folder that contains ISO, Programs and Scripts).";
+            f.Description = "Select the toolkit drive (the folder that contains ISO, Tools and src).";
             if (f.ShowDialog(this) != DialogResult.OK) return;
             SetRoot(f.SelectedPath);
-            if (root == null) MessageBox.Show(this, "That folder does not contain Scripts\\Update\\update_isos.py.", Text);
+            if (root == null) MessageBox.Show(this, "That folder does not contain src\\Scripts\\Update\\update_isos.py.", Text);
         }
     }
 

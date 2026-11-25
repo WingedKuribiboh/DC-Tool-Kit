@@ -1,10 +1,10 @@
 @echo off
-:: Update-Tools.cmd - updates the portable programs in Programs\ (see update_tools.py).
+:: Update-Tools.cmd - updates the portable programs in src\Programs\ (see update_tools.py).
 ::   Update-Tools.cmd            update everything that is out of date
 ::   Update-Tools.cmd --list     only show status
 ::   Update-Tools.cmd 7zip       only that entry
 :: Uses an installed Python if there is one; otherwise fetches a portable
-:: Python (about 11 MB, from python.org) into Scripts\Update\python\ once.
+:: Python (about 11 MB, from python.org) into src\Scripts\Update\python\ once.
 setlocal
 set "HERE=%~dp0"
 set "PY="

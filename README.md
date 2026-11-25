@@ -11,7 +11,7 @@ Ventoy multiboot stick. Boot it for installers/rescue ISOs; open it in Windows f
 | `Tools\` | Click-to-run launchers (see below) |
 | `src\Programs` | The actual portable programs the launchers point to |
 | `src\Scripts` | `BitLocker\` (unlock script) and `Update\` (ISO / tool updaters) |
-| `src\Management` | C# source + `build.bat` for the GUI tools, and `LauncherMaker_v2.exe` |
+| `src\ITToolkit`, `src\UpdateToolkit`, `src\BitLockerTool` | C# source + `build.bat` for the GUI tools (`src\LauncherMaker_v2.exe` makes the launchers) |
 | `Reports` | Output from scripts, one folder per machine |
 | `ventoy\ventoy.json` | Boot menu names, tooltips, theme (`ventoy\theme\bsol`) |
 | `key.txt` (drive root, created on demand) | BitLocker recovery key hand-off file; wiped after use |
@@ -29,13 +29,13 @@ Each `.exe` in `Tools\` is a small stub that starts a program in `src\Programs\`
 
 `src\Programs` also holds the full Sysinternals Suite (no launcher; run from there).
 
-## GUI tools (`src\Management`)
+## GUI tools (`src\`)
 All three build with the `csc.exe` that ships with Windows (.NET Framework 4.x, no SDK): run `build.bat` in the tool's folder.
 
 - **ITToolkit** (`ITToolkit\ITToolkit.exe`) - DISM / SFC / CHKDSK repair, disk health, network diagnostics, UEFI/boot (ESP) tools and system info. Works on the running OS or an offline Windows drive (`/target:D:`). Auto-elevates. Command line: `/target`, `/source` (e.g. `wim:E:\sources\install.wim:1`), `/scratch`, `/run:<id>[,<id>]`, `/log`, `/exit`, `/list` (shows tool ids), `/help`. Example: `ITToolkit.exe /target:D: /run:full-repair /log:E:\repair.log /exit`
 - **UpdateToolkit** (`UpdateToolkit\UpdateToolkit.exe`) - GUI with progress bars for the two updaters below. Args: `all|isos|tools` to start immediately, `/check` (download nothing), `/force`, `/root:X:\`.
 - **BitLockerTool** - source for `Tools\BitLocker\BitLocker Unlock.exe` (its `build.bat` writes there).
-- **LauncherMaker_v2.exe** - generates the stub launchers in `Tools\`.
+- **LauncherMaker_v2.exe** (`src\`) - generates the stub launchers in `Tools\`.
 
 ## Use
 - Boot: pick the stick in the BIOS/UEFI boot menu; ISOs are listed by folder.
@@ -52,4 +52,4 @@ All three build with the `csc.exe` that ships with Windows (.NET Framework 4.x, 
 
 ## Housekeeping
 - macOS leaves `._*` files and `.Spotlight-V100`, `.fseventsd`, `.Trashes` on the stick. Ventoy ignores `._*` (`VTOY_FILT_DOT_UNDERSCORE_FILE`); they are safe to delete.
-- `src\Management\UpdateToolkit\error.txt` is a stale log from a bad `/root` argument and can be deleted.
+- `src\UpdateToolkit\error.txt` is a stale log from a bad `/root` argument and can be deleted.

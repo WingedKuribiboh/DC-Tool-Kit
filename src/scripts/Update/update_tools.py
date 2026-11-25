@@ -2,8 +2,8 @@
 """
 Update-Tools  --  module 2 of the IT Toolkit update utility.
 
-Keeps the portable programs in Programs\\ current. The launchers in Tools\\*\\*.exe
-point at fixed paths inside Programs\\, so every update is unpacked/renamed to the
+Keeps the portable programs in src\\Programs\\ current. The launchers in Tools\\*\\*.exe
+point at fixed paths inside src\\Programs\\, so every update is unpacked/renamed to the
 exact same layout and the launchers keep working.
 
     Programs\\7-Zip\\                7-Zip          github.com/ip7z/7zip (x64 installer, unpacked)
@@ -49,7 +49,7 @@ from updlib import _now, _human, _progress, _progress_end, _default_opener
 
 SECTION = "Tools"
 SKIPPED = "Skipped"
-PROGRAMS = "Programs"
+PROGRAMS = PROGRAMS_DIR                        # src\Programs under the drive root
 BIN_DIR = os.path.join(SCRIPT_DIR, ".bin")        # helper binaries fetched on demand
 
 
@@ -421,7 +421,7 @@ def update_entry(entry, root, state, force=False, dry=False):
             src = unpack(entry, archive, unpacked, root, latest)
             os.makedirs(dest, exist_ok=True)
             n = merge(src, dest, entry.get("keep", []))
-            print("               unpacked %d files into Programs\\%s" % (n, entry["dest"]))
+            print("               unpacked %d files into %s" % (n, os.path.join(PROGRAMS, entry["dest"])))
             chk = os.path.join(dest, entry["check"])
             if not os.path.isfile(chk):
                 raise UpdateError("launcher target missing after update: " + chk)
@@ -433,7 +433,7 @@ def update_entry(entry, root, state, force=False, dry=False):
 
     state[key] = {"version": latest["version"], "date": _now()}
     save_section(SECTION, state)
-    print("               updated -> Programs\\%s" % entry["dest"])
+    print("               updated -> %s" % os.path.join(PROGRAMS, entry["dest"]))
     return True
 
 
@@ -483,7 +483,7 @@ def main(argv=None):
     if bad:
         ap.error("unknown entries: %s (valid: %s)" % (", ".join(bad), ", ".join(sorted(keys))))
     if not os.path.isdir(os.path.join(args.root, PROGRAMS)):
-        ap.error("no Programs folder under %s (use --root)" % args.root)
+        ap.error("no %s folder under %s (use --root with the drive root)" % (PROGRAMS, args.root))
 
     state = load_section(SECTION)
     todo = [e for e in CATALOG if not args.only or e["key"] in args.only]
@@ -495,7 +495,7 @@ def main(argv=None):
         results[e["key"]] = update_entry(e, args.root, state, args.force, args.dry)
     skipped = write_skipped(args.root)
     failed = [k for k, ok in results.items() if not ok]
-    print("\nDone. %d ok, %d failed%s. %d other items in Programs\\ listed under [Skipped] in ver.log."
+    print("\nDone. %d ok, %d failed%s. %d other items in src\\Programs\\ listed under [Skipped] in ver.log."
           % (len(results) - len(failed), len(failed), (": " + ", ".join(failed)) if failed else "", len(skipped)))
     updlib.emit("DONE", len(results) - len(failed), len(failed))
     return 1 if failed else 0
