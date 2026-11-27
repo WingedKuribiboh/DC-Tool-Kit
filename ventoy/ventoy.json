@@ -1,4 +1,4 @@
-﻿{
+{
     "control":  [
                     {
                         "VTOY_DEFAULT_MENU_MODE":  "1"
@@ -10,6 +10,18 @@
                         "VTOY_FILT_DOT_UNDERSCORE_FILE":  "1"
                     }
                 ],
+    "auto_install":  [
+                         {
+                             "image":  "/ISO/1-Windows Install/Win11_x64.iso",
+                             "template":  "/ventoy/script/autounattend.xml",
+                             "autosel":  1
+                         },
+                         {
+                             "image":  "/ISO/1-Windows Install/Win11_arm.iso",
+                             "template":  "/ventoy/script/autounattend.xml",
+                             "autosel":  1
+                         }
+                     ],
     "theme":  {
                   "file":  "/ventoy/theme/bsol/theme.txt",
                   "gfxmode":  "1920x1080"
