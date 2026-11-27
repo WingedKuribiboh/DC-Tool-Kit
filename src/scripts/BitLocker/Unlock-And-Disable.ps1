@@ -2,7 +2,8 @@
   Unlock-And-Disable.ps1 - unlock a BitLocker volume with its recovery password, then decrypt it.
   Run as admin.
 
-  Workflow: on another machine, paste the 48-digit recovery password into key.txt at the ROOT of the stick (e.g. E:\key.txt),
+  Workflow: on another machine, paste the 48-digit recovery password into key.txt at the ROOT of the stick (e.g. E:\key.txt;
+  on a Mac, Tools/BitLocker/BitLocker Key Entry.app writes it for you),
   then run this on the locked machine. key.txt is wiped when the script finishes, pass or fail.
   Usage: .\Unlock-And-Disable.ps1 [-Drive C:]
 #>

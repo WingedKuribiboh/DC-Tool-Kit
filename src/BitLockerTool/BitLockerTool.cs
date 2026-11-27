@@ -2,8 +2,8 @@
 // Unlocks a BitLocker volume with its 48-digit recovery password, turns BitLocker off and shows
 // decryption progress.
 //
-// Workflow: on another machine, paste the recovery password into key.txt at the ROOT of the toolkit
-// stick (e.g. E:\key.txt). Plug the stick into the locked machine and run this. key.txt is wiped
+// Workflow: on another machine, put the recovery password into key.txt at the ROOT of the toolkit
+// stick (e.g. E:\key.txt) - on a Mac, Tools/BitLocker/BitLocker Key Entry.app prompts for it and writes the file. Plug the stick into the locked machine and run this. key.txt is wiped
 // (overwritten, then emptied) as soon as the unlock step has run, pass or fail, and again on exit.
 //
 // Targets .NET Framework 4.x / C# 5 so it builds with the csc.exe that ships with Windows (build.bat).

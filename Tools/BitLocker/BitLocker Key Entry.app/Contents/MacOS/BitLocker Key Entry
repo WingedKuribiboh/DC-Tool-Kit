@@ -1,0 +1,194 @@
+#!/bin/bash
+# BitLocker Key Entry (macOS) - asks for a 48-digit BitLocker recovery password and writes it to
+# key.txt at the root of the toolkit stick this app runs from. "BitLocker Unlock.exe" (Windows)
+# reads key.txt on the locked machine and wipes it after the unlock step.
+#
+# Plain bash + osascript so it needs no Xcode build and can be edited on any OS.
+# Source of truth is this file; keep it LF line endings (see .gitattributes).
+
+TITLE="BitLocker Key Entry"
+
+# Run from a temp copy of this script so nothing on the stick stays open (lets us eject it at the end).
+if [ -z "$BLKE_COPY" ]; then
+    case "$0" in /*) self="$0" ;; *) self="$PWD/$0" ;; esac
+    tmp=$(/usr/bin/mktemp -t blke) && /bin/cp "$self" "$tmp" && /bin/chmod 700 "$tmp" &&
+        BLKE_COPY="$tmp" BLKE_SELF="$self" exec /bin/bash "$tmp" "$@"
+    BLKE_SELF="$self"   # copy failed: carry on in place
+fi
+[ -n "$BLKE_COPY" ] && trap '/bin/rm -f "$BLKE_COPY"' EXIT
+cd / || exit 1
+
+# ---- dialogs ----
+
+# msg ICON TEXT BUTTON...  -> prints the button clicked; non-zero exit if closed/cancelled.
+msg() {
+    local icon="$1"; shift
+    /usr/bin/osascript \
+        -e 'on run argv' \
+        -e 'activate' \
+        -e 'set b to items 4 thru -1 of argv' \
+        -e 'if item 3 of argv is "stop" then' \
+        -e 'return button returned of (display dialog (item 1 of argv) with title (item 2 of argv) buttons b default button (last item of b) with icon stop)' \
+        -e 'else if item 3 of argv is "caution" then' \
+        -e 'return button returned of (display dialog (item 1 of argv) with title (item 2 of argv) buttons b default button (last item of b) with icon caution)' \
+        -e 'else' \
+        -e 'return button returned of (display dialog (item 1 of argv) with title (item 2 of argv) buttons b default button (last item of b) with icon note)' \
+        -e 'end if' \
+        -e 'end run' \
+        "$1" "$TITLE" "$icon" "${@:2}" 2>/dev/null
+}
+
+# ask_key PROMPT  (previous input comes in via BLKE_DEFAULT, not argv, so it stays out of ps)
+ask_key() {
+    /usr/bin/osascript \
+        -e 'on run argv' \
+        -e 'activate' \
+        -e 'set d to system attribute "BLKE_DEFAULT"' \
+        -e 'return text returned of (display dialog (item 1 of argv) default answer d with title (item 2 of argv) buttons {"Cancel", "Save"} default button "Save" cancel button "Cancel" with icon note)' \
+        -e 'end run' \
+        "$1" "$TITLE" 2>/dev/null
+}
+
+choose_drive() {
+    /usr/bin/osascript \
+        -e 'activate' \
+        -e 'POSIX path of (choose folder with prompt "Select the toolkit USB drive:" default location (POSIX file "/Volumes"))' 2>/dev/null
+}
+
+# ---- find the stick ----
+
+# /Volumes/NAME/anything -> /Volumes/NAME
+vol_root() {
+    case "$1" in
+        /Volumes/?*) local rest="${1#/Volumes/}"; echo "/Volumes/${rest%%/*}" ;;
+        *) return 1 ;;
+    esac
+}
+
+root=$(vol_root "$BLKE_SELF")
+while [ -z "$root" ] || [ ! -d "$root" ]; do
+    c=$(msg caution "This app is not running from a USB drive. Select the toolkit drive to write key.txt to." "Quit" "Select Drive") || exit 0
+    [ "$c" = "Select Drive" ] || exit 0
+    picked=$(choose_drive) || exit 0
+    root=$(vol_root "$picked")
+    [ -z "$root" ] && { msg stop "Pick a drive under /Volumes (the USB stick), not a folder on this Mac." "OK" >/dev/null || exit 0; }
+done
+volname="${root#/Volumes/}"
+keyfile="$root/key.txt"
+
+# Why a Save dialog: macOS privacy (TCC) won't let this unsigned app write to the removable drive
+# it runs from ("Operation not permitted"), even with Full Disk Access or an ad-hoc signature.
+# A file the user picks in a Save dialog is allowed, so osascript shows the dialog and does the
+# write itself. The key comes in via BLKE_KEY, not argv, so it stays out of ps.
+#
+# save_key PROMPT ROOT EXPECTED_PATH -> prints OK, or WRONG:<path> if saved somewhere else
+# (nothing is written then). Non-zero exit with the error text on failure or cancel (-128).
+save_key() {
+    /usr/bin/osascript \
+        -e 'on run argv' \
+        -e 'activate' \
+        -e 'set k to (system attribute "BLKE_KEY") & return & linefeed' \
+        -e 'set f to choose file name with prompt (item 1 of argv) default name "key.txt" default location ((POSIX file (item 2 of argv)) as alias)' \
+        -e 'set p to POSIX path of f' \
+        -e 'if p is not (item 3 of argv) then return "WRONG:" & p' \
+        -e 'set fh to open for access f with write permission' \
+        -e 'try' \
+        -e 'set eof fh to 0' \
+        -e 'write k to fh' \
+        -e 'close access fh' \
+        -e 'on error e number n' \
+        -e 'try' \
+        -e 'close access fh' \
+        -e 'end try' \
+        -e 'error e number n' \
+        -e 'end try' \
+        -e 'if (read f) is not k then error "key.txt reads back differently from what was written."' \
+        -e 'return "OK"' \
+        -e 'end run' \
+        "$1" "$2" "$3" 2>&1
+}
+
+# ---- get and check the key ----
+
+# Same rules as BitLocker Unlock.exe: 8 groups of 6 digits, each divisible by 11 and below 720896.
+# Sets ERR (empty if good) and KEY (the dashed 48-digit form, empty if bad).
+check_key() {
+    local digits i g n
+    KEY=""; ERR=""
+    digits=$(printf '%s' "$1" | /usr/bin/tr -cd '0-9')
+    if [ ${#digits} -eq 0 ]; then ERR="Nothing entered."; return; fi
+    if [ ${#digits} -ne 48 ]; then ERR="That has ${#digits} digits. A recovery password has 48 (8 groups of 6)."; return; fi
+    for i in 0 1 2 3 4 5 6 7; do
+        g="${digits:$((i * 6)):6}"
+        n=$((10#$g))
+        if [ $((n % 11)) -ne 0 ] || [ "$n" -ge 720896 ]; then
+            ERR="Group $((i + 1)) ($g) is not valid. Check for a typo."
+            KEY=""
+            return
+        fi
+        KEY="${KEY}${KEY:+-}$g"
+    done
+}
+
+prompt="Enter the 48-digit BitLocker recovery password.
+
+Dashes and spaces are optional. Next, a Save dialog opens on \"$volname\": just click Save."
+BLKE_DEFAULT=""
+export BLKE_DEFAULT
+while :; do
+    raw=$(ask_key "$prompt") || exit 0
+    check_key "$raw"
+    [ -z "$ERR" ] && break
+    BLKE_DEFAULT="$raw"
+    prompt="$ERR
+
+Enter the 48-digit BitLocker recovery password:"
+done
+BLKE_DEFAULT=""
+raw=""
+
+# ---- write it ----
+
+tail6="${KEY: -6}"
+export BLKE_KEY="$KEY"
+KEY=""
+while :; do
+    out=$(save_key "Save key.txt to the top level of \"$volname\" (keep the name key.txt):" "$root" "$keyfile")
+    rc=$?
+    case "$rc:$out" in
+        0:OK) break ;;
+        0:WRONG:*)
+            c=$(msg caution "Nothing was saved. key.txt has to go at the top level of \"$volname\" (not in a folder, not renamed), because that's where BitLocker Unlock.exe looks.
+
+You picked: ${out#WRONG:}" "Quit" "Try Again") || { BLKE_KEY=""; exit 0; }
+            [ "$c" = "Try Again" ] || { BLKE_KEY=""; exit 0; } ;;
+        *"(-128)"*) BLKE_KEY=""; exit 0 ;;   # Cancel in the Save dialog
+        *)
+            BLKE_KEY=""
+            msg stop "Could not write key.txt to \"$volname\".
+
+macOS said: ${out#*execution error: }
+
+If key.txt is marked read-only, clear that on Windows or delete it, then try again." "Quit" >/dev/null
+            exit 1 ;;
+    esac
+done
+BLKE_KEY=""
+/bin/sync
+
+choice=$(msg note "Saved key.txt to \"$volname\" (ends in $tail6).
+
+Plug the stick into the locked PC and run Tools/BitLocker/BitLocker Unlock.exe. It wipes key.txt after unlocking." "Done" "Eject Drive") || exit 0
+
+if [ "$choice" = "Eject Drive" ]; then
+    if out=$(/usr/sbin/diskutil eject "$root" 2>&1); then
+        msg note "\"$volname\" ejected. You can unplug it." "OK" >/dev/null
+    else
+        msg caution "Could not eject \"$volname\":
+
+$out
+
+Close any windows using the drive and eject it from Finder." "OK" >/dev/null
+    fi
+fi
+exit 0

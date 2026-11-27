@@ -8,14 +8,18 @@ desktop.ini
 __pycache__/
 *.pyc
 
-# Boot images are too big for git; fetched by src/Scripts/Update/Update-Isos.cmd
+# Boot images are too big for git; fetched by src/scripts/Update/Update-Isos.cmd
 ISO/**/*.iso
+
+# Over GitHub's 100 MB limit; added to the stick by hand
+src/programs/reflect_setup_free_x64.exe
 
 # Secrets and customer data
 key.txt
-src/Scripts/data/
+src/scripts/data/
 Reports/
 
 # Build output / logs
 src/UpdateToolkit/error.txt
-.DS_Store
+*.pdb
+src/programs/FurMark/_geexlab_log.txt
