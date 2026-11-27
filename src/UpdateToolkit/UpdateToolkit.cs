@@ -1,4 +1,4 @@
-// Update Toolkit - GUI front end for the toolkit update modules (src\Scripts\Update\update_isos.py,
+// Update Toolkit - GUI front end for the toolkit update modules (system\Update\update_isos.py,
 // update_tools.py). It runs the scripts, reads their progress output and shows it as progress bars.
 // Targets .NET Framework 4.5+ / C# 5 so it builds with the csc.exe that ships with Windows.
 //
@@ -128,7 +128,7 @@ class MainForm : Form
             else if (l == "all" || l == "isos" || l == "tools") run = l;
         }
         SetRoot(rootArg != null ? rootArg : FindRoot());
-        if (root == null) AppendLog("Could not find the toolkit drive (src\\Scripts\\Update\\update_isos.py). Click \"Change...\" and pick the drive root.\n", Color.DarkRed);
+        if (root == null) AppendLog("Could not find the toolkit drive (system\\Update\\update_isos.py). Click \"Change...\" and pick the drive root.\n", Color.DarkRed);
 
         if (run != null && root != null)
         {
@@ -152,8 +152,8 @@ class MainForm : Form
 
     // ---------------------------------------------------------------- root
 
-    // The updater scripts live in <drive root>\src\Scripts\Update.
-    static readonly string UpdSubDir = Path.Combine("src", Path.Combine("Scripts", "Update"));
+    // The updater scripts live in <drive root>\system\Update (a hidden folder on the stick).
+    static readonly string UpdSubDir = Path.Combine("system", "Update");
 
     static bool IsRoot(string dir)
     {
@@ -192,10 +192,10 @@ class MainForm : Form
     {
         using (FolderBrowserDialog f = new FolderBrowserDialog())
         {
-            f.Description = "Select the toolkit drive (the folder that contains ISO, Tools and src).";
+            f.Description = "Select the toolkit drive (the folder that contains ISO, Tools and system).";
             if (f.ShowDialog(this) != DialogResult.OK) return;
             SetRoot(f.SelectedPath);
-            if (root == null) MessageBox.Show(this, "That folder does not contain src\\Scripts\\Update\\update_isos.py.", Text);
+            if (root == null) MessageBox.Show(this, "That folder does not contain system\\Update\\update_isos.py.", Text);
         }
     }
 

@@ -2,22 +2,22 @@
 """
 Update-Tools  --  module 2 of the IT Toolkit update utility.
 
-Keeps the portable programs in src\\Programs\\ current. The launchers in Tools\\*\\*.exe
-point at fixed paths inside src\\Programs\\, so every update is unpacked/renamed to the
+Keeps the portable programs in programs\\ current. The launchers in Tools\\*\\*.exe
+point at fixed paths inside programs\\, so every update is unpacked/renamed to the
 exact same layout and the launchers keep working.
 
-    Programs\\7-Zip\\                7-Zip          github.com/ip7z/7zip (x64 installer, unpacked)
-    Programs\\WinDirStat\\           WinDirStat     github.com/windirstat/windirstat (portable zip)
-    Programs\\Revo Uninstaller\\     Revo Free      revouninstaller.com (portable zip)
-    Programs\\hdsentinel\\           HD Sentinel Pro  hdsentinel.com (portable zip; license kept)
-    Programs\\RogueKiller.exe       Adlice Protect  adlice.com (portable x64, Win10+ build)
-    Programs\\MBSetup.exe           Malwarebytes   malwarebytes.com (online installer)
-    Programs\\Notepad++\\            Notepad++      github.com/notepad-plus-plus (portable zip)
-    Programs\\Autoruns\\, Sysinternals Suite\\   download.sysinternals.com (zips)
-    Programs\\Everything\\, PuTTY\\, Prime95\\ vendor portable zips
-    Programs\\Rufus\\Rufus.exe, adwcleaner.exe, Samsung_Magician_Installer.exe   vendor downloads, renamed to the launcher names
+    programs\\7-Zip\\                7-Zip          github.com/ip7z/7zip (x64 installer, unpacked)
+    programs\\WinDirStat\\           WinDirStat     github.com/windirstat/windirstat (portable zip)
+    programs\\Revo Uninstaller\\     Revo Free      revouninstaller.com (portable zip)
+    programs\\hdsentinel\\           HD Sentinel Pro  hdsentinel.com (portable zip; license kept)
+    programs\\RogueKiller.exe       Adlice Protect  adlice.com (portable x64, Win10+ build)
+    programs\\MBSetup.exe           Malwarebytes   malwarebytes.com (online installer)
+    programs\\Notepad++\\            Notepad++      github.com/notepad-plus-plus (portable zip)
+    programs\\Autoruns\\, Sysinternals Suite\\   download.sysinternals.com (zips)
+    programs\\Everything\\, PuTTY\\, Prime95\\ vendor portable zips
+    programs\\Rufus\\Rufus.exe, adwcleaner.exe, Samsung_Magician_Installer.exe   vendor downloads, renamed to the launcher names
 
-Versions are logged in ver.log under [Tools]. Everything else found in Programs\\ is
+Versions are logged in ver.log under [Tools]. Everything else found in programs\\ is
 listed under [Skipped] in the same file, for future reference.
 
 Usage:
@@ -49,7 +49,7 @@ from updlib import _now, _human, _progress, _progress_end, _default_opener
 
 SECTION = "Tools"
 SKIPPED = "Skipped"
-PROGRAMS = PROGRAMS_DIR                        # src\Programs under the drive root
+PROGRAMS = PROGRAMS_DIR                        # programs\ under the drive root (hidden folder)
 BIN_DIR = os.path.join(SCRIPT_DIR, ".bin")        # helper binaries fetched on demand
 
 
@@ -226,7 +226,7 @@ def latest_samsung_magician():
 
 
 # ----------------------------------------------------------------------------
-# Catalog.  dest is relative to Programs\ and must never change (launchers use it).
+# Catalog.  dest is relative to programs\ and must never change (launchers use it).
 #   kind   zip | zip_strip (zip with one wrapper folder) | nsis | file
 #   check  file that must exist afterwards (what the Tools launcher starts)
 #   keep   globs (relative to dest) that are never overwritten when present
@@ -449,7 +449,7 @@ SKIP_REASONS = {
 
 
 def write_skipped(root):
-    """[Skipped]: everything in Programs\\ that this module does not manage."""
+    """[Skipped]: everything in programs\\ that this module does not manage."""
     managed = {e["dest"].replace("\\", "/").split("/")[0].lower() for e in CATALOG}
     old = load_section(SKIPPED)
     new = {}
@@ -468,7 +468,7 @@ def write_skipped(root):
 # ----------------------------------------------------------------------------
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description="Update the portable programs in Programs\\ on the IT Toolkit stick.")
+    ap = argparse.ArgumentParser(description="Update the portable programs in programs\\ on the IT Toolkit stick.")
     ap.add_argument("only", nargs="*", help="entries to process (default: all). Keys: " +
                     ", ".join(e["key"] for e in CATALOG))
     ap.add_argument("--root", default=DEFAULT_ROOT, help="toolkit drive root (default: %(default)s)")
@@ -495,7 +495,7 @@ def main(argv=None):
         results[e["key"]] = update_entry(e, args.root, state, args.force, args.dry)
     skipped = write_skipped(args.root)
     failed = [k for k, ok in results.items() if not ok]
-    print("\nDone. %d ok, %d failed%s. %d other items in src\\Programs\\ listed under [Skipped] in ver.log."
+    print("\nDone. %d ok, %d failed%s. %d other items in programs\\ listed under [Skipped] in ver.log."
           % (len(results) - len(failed), len(failed), (": " + ", ".join(failed)) if failed else "", len(skipped)))
     updlib.emit("DONE", len(results) - len(failed), len(failed))
     return 1 if failed else 0

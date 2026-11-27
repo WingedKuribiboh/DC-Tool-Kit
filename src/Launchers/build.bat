@@ -1,0 +1,4 @@
+@echo off
+:: Rebuilds every Tools\ launcher listed in launchers.txt (see build.ps1).
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0build.ps1"
+if errorlevel 1 pause

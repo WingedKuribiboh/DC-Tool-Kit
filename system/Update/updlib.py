@@ -24,22 +24,24 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Drive layout (all relative to the drive root):
 #   ISO\...                 boot images          (update_isos.py)
-#   src\Programs\...        portable programs    (update_tools.py; Tools\*.exe launchers point here)
-#   src\Scripts\Update\     these scripts + ver.log
-PROGRAMS_DIR = os.path.join("src", "Programs")
+#   programs\...            portable programs    (update_tools.py; Tools\*.exe launchers point here)
+#   system\Update\          these scripts + ver.log
+# programs\ and system\ are hidden folders on the stick (set by the self-extracting package).
+PROGRAMS_DIR = "programs"
+SYSTEM_DIR = "system"
 
 
 def _find_root():
-    """Drive root = the folder above src\\ that holds ISO\\ / ventoy\\. These scripts live in
-    <root>\\src\\Scripts\\Update, so walk up from here; fall back to three levels up."""
+    """Drive root = the folder that holds system\\ next to ISO\\ / Tools\\. These scripts live in
+    <root>\\system\\Update, so walk up from here; fall back to two levels up."""
     d = SCRIPT_DIR
     while True:
-        if os.path.isdir(os.path.join(d, "src")) and (
-                os.path.isdir(os.path.join(d, "ISO")) or os.path.isdir(os.path.join(d, "ventoy"))):
+        if os.path.isdir(os.path.join(d, SYSTEM_DIR)) and (
+                os.path.isdir(os.path.join(d, "ISO")) or os.path.isdir(os.path.join(d, "Tools"))):
             return d
         parent = os.path.dirname(d)
         if parent == d:
-            return os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", ".."))
+            return os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
         d = parent
 
 

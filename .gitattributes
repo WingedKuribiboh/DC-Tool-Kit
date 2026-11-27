@@ -1,3 +1,5 @@
 # macOS app bundle script must keep LF endings or bash on the Mac fails with "\r: command not found".
 **/*.app/Contents/MacOS/* text eol=lf
 **/*.app/Contents/Info.plist text eol=lf
+# Shell scripts (build.sh, the Mac self-extractor header) must keep LF endings.
+*.sh text eol=lf

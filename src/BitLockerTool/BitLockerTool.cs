@@ -1,4 +1,4 @@
-// BitLocker Unlock & Decrypt - GUI version of src\scripts\BitLocker\Unlock-And-Disable.ps1.
+// BitLocker Unlock & Decrypt - GUI version of src\BitLockerTool\Unlock-And-Disable.ps1.
 // Unlocks a BitLocker volume with its 48-digit recovery password, turns BitLocker off and shows
 // decryption progress.
 //

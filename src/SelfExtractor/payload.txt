@@ -1,0 +1,9 @@
+# What goes into the self-extracting packages (top-level files/folders of the repo).
+# Used by build.sh and build.ps1. ISOs (*.iso) are always left out: UpdateToolkit.exe downloads them.
+UpdateToolkit.exe
+README.md
+ISO
+Tools
+programs
+system
+ventoy
