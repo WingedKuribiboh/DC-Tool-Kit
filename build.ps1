@@ -46,6 +46,11 @@ Write-Host 'Built dist\build\UpdateToolkit.exe (from src\UpdateToolkit\UpdateToo
 Write-Warning 'UpdateToolkit.app can only be built on a Mac (build.sh); this package will not include it.'
 if (-not $NoCompile) {
     & (Join-Path $Root 'src\Launchers\build.ps1')
+    Invoke-Csc @('/nologo', '/target:winexe', '/platform:anycpu', '/optimize+', "/out:$Root\Tools\NetUserManager.exe",
+        "/win32manifest:$Root\src\net-user-gui\app.manifest",
+        '/r:System.dll', '/r:System.Core.dll', '/r:System.Drawing.dll', '/r:System.Windows.Forms.dll',
+        "$Root\src\net-user-gui\NetUserManager.cs")
+    Write-Host 'Built Tools\NetUserManager.exe (from src\net-user-gui)'
     Invoke-Csc @('/nologo', '/target:winexe', '/platform:anycpu', '/optimize+', "/out:$Sfx\SelfExtractor.exe",
         "/win32manifest:$Sfx\app.manifest", "/win32icon:$Root\src\Icon\DCToolKit.ico",
         '/r:System.dll', '/r:System.Drawing.dll', '/r:System.Windows.Forms.dll', '/r:System.IO.Compression.dll',

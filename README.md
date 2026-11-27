@@ -56,7 +56,8 @@ The ISOs and most portable programs are **not stored in this repo**. They are do
 | `Tools\` | Click-to-run launchers and tools (see below) |
 | `programs\` (hidden) | The actual portable programs the launchers point to |
 | `system\` (hidden) | `Update\` (ISO / tool updater scripts, `UpdateToolkit.command` for the Mac Terminal, portable Python, `ver.log`) and `LauncherMaker_v2.exe` |
-| `ventoy\ventoy.json` (hidden) | Boot menu names, tooltips, theme (`ventoy\theme\bsol`) |
+| `ventoy\ventoy.json` (hidden) | Boot menu names, tooltips, theme (`ventoy\theme\bsol`), and the auto-install template for the Windows 11 ISOs |
+| `ventoy\script\autounattend.xml` (hidden) | Windows 11 answer file (see *Windows 11 unattended setup* below) |
 | `Reports` | Output from scripts, one folder per machine |
 | `autorun.inf`, `DCToolKit.ico`, `.VolumeIcon.icns` (hidden) | Drive name and icon (Windows / macOS) |
 | `key.txt` (drive root, created on demand) | BitLocker recovery key hand-off file; wiped after use |
@@ -68,7 +69,7 @@ Each launcher `.exe` in `Tools\` is a small stub that starts a program in `progr
 
 | Folder | Contents |
 |---|---|
-| `Tools\` | **UefiRebuilder.exe** - rebuilds the EFI system partition / boot files (real tool, not a stub) |
+| `Tools\` | **UefiRebuilder.exe** - rebuilds the EFI system partition / boot files (real tool, not a stub). **NetUserManager.exe** - GUI for `net user`: change a local user's password, rename them, add/remove admin rights, create users (real tool; asks for admin) |
 | `Tools\BitLocker` | **BitLocker Unlock.exe** - GUI to unlock with a recovery password and decrypt (real tool). **BitLocker Key Entry.app** - macOS app that asks for the recovery password and writes `key.txt` to the stick |
 | `Tools\Storage` | Hard Disk Sentinel, Macrium Reflect (installer), MiniTool Partition Wizard (installer), Rufus, Samsung Magician (installer), WinDirStat |
 | `Tools\Malware Scans` | Adlice Protect (RogueKiller), AdwCleaner, Autoruns, Junkware Removal Tool, Malwarebytes (installer), Revo Uninstaller, rkill |
@@ -78,13 +79,15 @@ Each launcher `.exe` in `Tools\` is a small stub that starts a program in `progr
 `programs\` also holds the full Sysinternals Suite (no launcher; run from there).
 
 ## Source (`src\`)
-- **Launchers** - `Launcher.cs` + `launchers.txt` (launcher name | target under `programs\`). To add or change a launcher, edit `launchers.txt` and run `src/Launchers/build.sh` (Mac, mono) or `src\Launchers\build.bat` (Windows); `build.sh`/`build.ps1` also do this. Replaces `system\LauncherMaker_v2.exe`, which is kept for reference.
+- **Launchers** - `Launcher.cs` + `launchers.txt` (launcher name | target under `programs\` | icon in `src\Icons\`, blank for the toolkit icon). To add or change a launcher, edit `launchers.txt` and run `src/Launchers/build.sh` (Mac, mono) or `src\Launchers\build.bat` (Windows); `build.sh`/`build.ps1` also do this. Replaces `system\LauncherMaker_v2.exe`, which is kept for reference.
 - **UpdateToolkitMac** - `main.swift` + `Info.plist` for `UpdateToolkit.app` (Swift/AppKit, no Xcode project). Not committed as an app: the top-level `build.sh` builds it into every package. `src/UpdateToolkitMac/build.sh [out.app]` (Xcode command line tools) builds a universal, ad-hoc signed test copy, by default in `dist/build/`.
 - **SelfExtractor** - Windows extractor stub (`SelfExtractor.cs`), Mac extractor header (`mac-header.sh`) and the package list (`payload.txt`).
+- **Icons** - one `.ico` per launcher, named in the third column of `Launchers\launchers.txt` and compiled into the launcher `.exe`.
 - **Icon** - placeholder toolkit icon (`DCToolKit.png`, `.ico`, `.icns`) used for the drive, `UpdateToolkit.exe` and the Windows installer.
 - **UpdateToolkit** (`UpdateToolkit.cs`; not committed as an exe - `build.sh`/`build.ps1` compile it into every package, and `build.bat` here builds a git-ignored test copy next to the source) - GUI with progress bars for the two updaters in `system\Update`. Args: `all|isos|tools` to start immediately, `/check` (download nothing), `/force`, `/root:X:\`.
 - **BitLockerTool** - source for `Tools\BitLocker\BitLocker Unlock.exe` (its `build.bat` writes there) and the script version `Unlock-And-Disable.ps1`.
 - **BitLockerKeyEntry** - `launcher.c` + `build.sh` (Mac with Xcode command line tools): rebuilds the main executable of `Tools/BitLocker/BitLocker Key Entry.app` and ad-hoc signs it. The app's logic is `Contents/Resources/main.sh` inside the bundle.
+- **net-user-gui** - source for `Tools\NetUserManager.exe` (`NetUserManager.cs`, WinForms, .NET Framework 4.8). `build.sh`/`build.ps1` rebuild it into `Tools\` (unless `--no-compile`/`-NoCompile`); on its own run `src/net-user-gui/build.sh` (Mac, mono) or `src\net-user-gui\build.bat` (Windows).
 - **UefiRebuilder** - SDK-style project (`dotnet build -c Release src/UefiRebuilder`, works on Windows or Mac); copy the built exe to `Tools\UefiRebuilder.exe`.
 - **ITToolkit** (`ITToolkit\ITToolkit.exe`, `build.bat`) - DISM / SFC / CHKDSK repair, disk health, network diagnostics, UEFI/boot tools and system info. Not in the packages; copy it to the stick by hand if needed. Command line: `/target`, `/source` (e.g. `wim:E:\sources\install.wim:1`), `/scratch`, `/run:<id>[,<id>]`, `/log`, `/exit`, `/list`, `/help`.
 - **EFI-Breaker** - deliberately breaks UEFI boot on a test machine/VM to practise repairs. Dev/test only; not in the packages.
@@ -98,6 +101,14 @@ Each launcher `.exe` in `Tools\` is a small stub that starts a program in `progr
 - Keep portable programs current: `system\Update\Update-Tools.cmd` (same options). Updates 7-Zip, WinDirStat, Revo, HD Sentinel, Adlice, Malwarebytes, Notepad++, AdwCleaner, Sysinternals, Everything, PuTTY, Prime95, Rufus, Samsung Magician in place. DDU, FurMark, JRT, MiniTool, Macrium and rkill are not auto-updated.
 - HTTPS: the updaters trust the Windows certificate store plus `system\Update\cacert.pem` (Mozilla's CA bundle from curl.se, refreshed by `build.sh`/`build.ps1`). This avoids `CERTIFICATE_VERIFY_FAILED` on PCs whose root store is not fully populated.
 - Windows 11 ISOs: Microsoft's bot protection ("Sentinel") can reject the automated download. Then download them by hand from https://www.microsoft.com/software-download/windows11 and save them as `ISO\1-Windows Install\Win11_x64.iso` / `Win11_arm.iso`.
+- Windows 11 unattended setup: Ventoy's `auto_install` plugin (`ventoy\ventoy.json`) applies `ventoy\script\autounattend.xml` to `Win11_x64.iso` and `Win11_arm.iso` (amd64 and arm64). It:
+  - accepts the licence agreement; Setup still asks for the product key, the language and the disk;
+  - skips the network requirement (`HideWirelessSetupInOOBE`, plus the `BypassNRO` registry key as a fallback, which recent builds may ignore);
+  - skips the Microsoft account and local account screens and creates a local admin `User` with **no password**, which signs in automatically once; after that, press Enter at the login screen;
+  - skips the region and keyboard layout screens by setting English (US): keyboard `0409:00000409`, locale `en-US`. For another layout, change `InputLocale` (and the locales) in both `International-Core` blocks, e.g. UK = `0809:00000809` / `en-GB`;
+  - skips the privacy screen (`ProtectYourPC` = 3).
+
+  To change the account name, edit `<Name>` and `<Username>` in both `Shell-Setup` blocks. The file needs its `windowsPE` section: without it Setup does not copy the answer file into the installed system and nothing after the first reboot is applied. If it seems ignored: the ISO filenames must match `ventoy.json` exactly, boot in Ventoy's normal mode (not WIMBOOT/memdisk), pick the template (not "Boot without auto installation template") if Ventoy asks, and check that `C:\Windows\Panther\unattend.xml` exists on the installed machine.
 - Versions are tracked in `system\Update\ver.log` (`[ISO]`, `[Tools]`, `[Skipped]`).
 - BitLocker: on a Mac, plug in the stick and open `Tools/BitLocker/BitLocker Key Entry.app`. It asks for the 48-digit recovery password (dashes optional) and checks it, then opens a Save dialog already pointed at the drive root with `key.txt` filled in - click Save. It then offers to eject the stick. (The Save dialog is needed because macOS privacy rules block an unsigned app on a USB drive from writing to that drive directly, even with Full Disk Access; files picked in a Save dialog are allowed.) On Windows, paste the password into `key.txt` at the drive root (e.g. `E:\key.txt`) by hand instead. Then run `Tools\BitLocker\BitLocker Unlock.exe` on the locked machine. `key.txt` is overwritten and emptied right after the unlock attempt.
   - The app is unsigned (ad-hoc). Run from the stick it opens normally; if it was downloaded (e.g. a GitHub zip) macOS blocks it - right-click > Open, or run `xattr -dr com.apple.quarantine "BitLocker Key Entry.app"`. The Mac package clears this flag for you.

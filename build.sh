@@ -51,6 +51,10 @@ else
 fi
 if [[ $COMPILE -eq 1 ]]; then
     src/Launchers/build.sh
+    src/net-user-gui/build.sh
+    if [[ "$(uname)" == Darwin ]]; then
+        src/BitLockerKeyEntry/build.sh >/dev/null && echo "Built Tools/BitLocker/BitLocker Key Entry.app (from src/BitLockerKeyEntry)"
+    fi
     csc -nologo -target:winexe -platform:anycpu -optimize+ -out:"$SFX/SelfExtractor.exe" \
         -win32manifest:"$SFX/app.manifest" -win32icon:src/Icon/DCToolKit.ico \
         -r:System.dll -r:System.Drawing.dll -r:System.Windows.Forms.dll -r:System.IO.Compression.dll \
@@ -60,12 +64,21 @@ fi
 # mono's compiler can bind to string overloads that exist in mono/.NET Core but not in .NET Framework
 # (e.g. Split(char), Trim(char)); on Windows they crash with MissingMethodException. Use char[] instead.
 if command -v monodis >/dev/null; then
-    bad=$(for f in "$BUILD/UpdateToolkit.exe" "$SFX/SelfExtractor.exe" Tools/*/*.exe; do
+    bad=$(for f in "$BUILD/UpdateToolkit.exe" "$SFX/SelfExtractor.exe" Tools/*.exe Tools/*/*.exe; do
               monodis "$f" 2>/dev/null | grep -E -o 'string::(Split|Trim|TrimStart|TrimEnd|Contains|StartsWith|EndsWith|Join)\(char[,)][^)]*\)' | sed "s|^|$f: |" || true
           done | sort -u)
     [[ -z "$bad" ]] || { echo "Uses APIs missing from .NET Framework (pass a char[] instead):" >&2; echo "$bad" >&2; exit 1; }
 fi
 [[ -f "$SFX/SelfExtractor.exe" ]] || { echo "$SFX/SelfExtractor.exe missing; build without --no-compile." >&2; exit 1; }
+
+# Mac apps must have intact executables and signatures, or macOS refuses to open them.
+if [[ "$(uname)" == Darwin ]]; then
+    for app in "Tools/BitLocker/BitLocker Key Entry.app" "$BUILD/UpdateToolkit.app"; do
+        [[ -d "$app" ]] || continue
+        /usr/bin/codesign --verify --strict "$app" 2>/dev/null \
+            || { echo "$app is damaged or unsigned (codesign --verify failed). Rebuild it on a Mac." >&2; exit 1; }
+    done
+fi
 
 # Refresh the CA bundle the updater uses for HTTPS (system/Update/cacert.pem); keep the old one if offline.
 ca="system/Update/cacert.pem"

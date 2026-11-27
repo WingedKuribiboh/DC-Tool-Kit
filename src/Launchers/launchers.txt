@@ -1,23 +1,23 @@
-# Tools\ launcher  |  program it starts, relative to the toolkit root
+# Tools\ launcher  |  program it starts, relative to the toolkit root  |  icon in src\Icons (blank = toolkit icon)
 # Rebuild after editing: src/Launchers/build.sh (Mac, needs mono) or src\Launchers\build.bat (Windows).
-Malware Scans\Adlice Protect.exe            | programs\RogueKiller.exe
-Malware Scans\AdwCleaner.exe                | programs\adwcleaner.exe
-Malware Scans\Autoruns.exe                  | programs\Autoruns\Autoruns.exe
-Malware Scans\Junkware Removal Tool.exe     | programs\JRT.exe
-Malware Scans\Malwarebytes Setup.exe        | programs\MBSetup.exe
-Malware Scans\RevoUninstaller.exe           | programs\Revo Uninstaller\RevoUPort.exe
-Malware Scans\rkill.exe                     | programs\rkill.exe
-Storage\Hard Disk Sentinel.exe              | programs\hdsentinel\HDSentinel.exe
-Storage\Macrium Reflect Installer.exe       | programs\reflect_setup_x64.exe
-Storage\MiniTool Partition Wizard Setup.exe | programs\pw-free-online.exe
-Storage\Rufus.exe                           | programs\Rufus\Rufus.exe
-Storage\Samsung Magician Installer.exe      | programs\Samsung_Magician_Installer.exe
-Storage\WinDirStat.exe                      | programs\WinDirStat\x64\WinDirStat.exe
-Stress Test\FurMark.exe                     | programs\FurMark\FurMark_GUI.exe
-Stress Test\FurMark(GUI).exe                | programs\FurMark\FurMark_GUI.exe
-Stress Test\PRIME95.exe                     | programs\Prime95\prime95.exe
-Utilities\7-Zip File Manager.exe            | programs\7-Zip\7zFM.exe
-Utilities\Display_Driver_Uninstaller.exe    | programs\DDU\Display Driver Uninstaller.exe
-Utilities\Everything.exe                    | programs\Everything\everything.exe
-Utilities\Notepad++.exe                     | programs\Notepad++\notepad++.exe
-Utilities\Putty.exe                         | programs\PuTTY\putty.exe
+Malware Scans\Adlice Protect.exe            | programs\RogueKiller.exe                      | RogueKiller.ico
+Malware Scans\AdwCleaner.exe                | programs\adwcleaner.exe                       | adwcleaner.ico
+Malware Scans\Autoruns.exe                  | programs\Autoruns\Autoruns.exe                | Autoruns.ico
+Malware Scans\Junkware Removal Tool.exe     | programs\JRT.exe                              | JRT.ico
+Malware Scans\Malwarebytes Setup.exe        | programs\MBSetup.exe                          | MBSetup.ico
+Malware Scans\RevoUninstaller.exe           | programs\Revo Uninstaller\RevoUPort.exe       | RevoUPort.ico
+Malware Scans\rkill.exe                     | programs\rkill.exe                            | rkill.ico
+Storage\Hard Disk Sentinel.exe              | programs\hdsentinel\HDSentinel.exe            |
+Storage\Macrium Reflect Installer.exe       | programs\reflect_setup_x64.exe                | reflect.ico
+Storage\MiniTool Partition Wizard Setup.exe | programs\pw-free-online.exe                   | pw.ico
+Storage\Rufus.exe                           | programs\Rufus\Rufus.exe                      | Rufus.ico
+Storage\Samsung Magician Installer.exe      | programs\Samsung_Magician_Installer.exe       | Samsung Magician.ico
+Storage\WinDirStat.exe                      | programs\WinDirStat\x64\WinDirStat.exe        | WinDirStat.ico
+Stress Test\FurMark.exe                     | programs\FurMark\FurMark_GUI.exe              | FurMark.ico
+Stress Test\FurMark(GUI).exe                | programs\FurMark\FurMark_GUI.exe              | FurMark.ico
+Stress Test\PRIME95.exe                     | programs\Prime95\prime95.exe                  | prime95.ico
+Utilities\7-Zip File Manager.exe            | programs\7-Zip\7zFM.exe                       | 7zFM.ico
+Utilities\Display_Driver_Uninstaller.exe    | programs\DDU\Display Driver Uninstaller.exe   | Display Driver Uninstaller.ico
+Utilities\Everything.exe                    | programs\Everything\everything.exe            | everything.ico
+Utilities\Notepad++.exe                     | programs\Notepad++\notepad++.exe              | notepad++.ico
+Utilities\Putty.exe                         | programs\PuTTY\putty.exe                      | PUTTY.ico

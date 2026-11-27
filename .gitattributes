@@ -1,5 +1,9 @@
 # macOS app bundle script must keep LF endings or bash on the Mac fails with "\r: command not found".
-**/*.app/Contents/MacOS/* text eol=lf
+# The app executables are compiled Mach-O binaries: never let git touch their line endings (that corrupted
+# BitLocker Key Entry's arm64 slice). Scripts inside bundles stay LF.
+**/*.app/Contents/MacOS/* binary
+**/*.app/Contents/_CodeSignature/* binary
+**/*.app/Contents/Resources/*.sh text eol=lf
 **/*.app/Contents/Info.plist text eol=lf
 # Shell scripts (build.sh, the Mac self-extractor header) must keep LF endings.
 *.sh text eol=lf
