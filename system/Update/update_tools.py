@@ -77,7 +77,7 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 def redirect_target(url):
     """Return the Location a URL redirects to, without following it."""
-    op = urllib.request.build_opener(NoRedirect)
+    op = urllib.request.build_opener(NoRedirect, https_handler())
     op.addheaders = [("User-Agent", UA)]
     try:
         op.open(url, timeout=TIMEOUT)
@@ -86,6 +86,8 @@ def redirect_target(url):
         if loc:
             return urllib.parse.urljoin(url, loc)
         raise UpdateError("HTTP %s from %s" % (e.code, url))
+    except urllib.error.URLError as e:
+        raise UpdateError("%s (%s)" % (e.reason, url))
     raise UpdateError("expected a redirect from " + url)
 
 
@@ -376,7 +378,7 @@ def update_entry(entry, root, state, force=False, dry=False):
     dest = os.path.join(root, PROGRAMS, entry["dest"])
     try:
         latest = entry["resolve"]()
-    except (UpdateError, KeyError) as e:
+    except Exception as e:                             # one bad entry must not stop the rest
         print("[%-12s] %-20s ERROR resolving latest: %s" % (key, name, e))
         return False
 

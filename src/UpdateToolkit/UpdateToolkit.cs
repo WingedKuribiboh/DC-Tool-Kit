@@ -388,7 +388,7 @@ class MainForm : Form
     {
         if (line.StartsWith("@@"))
         {
-            string[] p = line.Substring(2).Split('|');
+            string[] p = line.Substring(2).Split(new char[] { '|' });   // char[] overload: Split(char) is not in .NET Framework
             if (p[0] == "ENTRY" && p.Length >= 5)
             {
                 int.TryParse(p[1], out entIndex); int.TryParse(p[2], out entCount);

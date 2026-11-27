@@ -3,3 +3,4 @@
 **/*.app/Contents/Info.plist text eol=lf
 # Shell scripts (build.sh, the Mac self-extractor header) must keep LF endings.
 *.sh text eol=lf
+*.command text eol=lf

@@ -24,5 +24,8 @@ system/Update/.bin/
 *.pdb
 programs/FurMark/_geexlab_log.txt
 
-# Build output (build.sh / build.ps1)
+# Build output (build.sh / build.ps1). UpdateToolkit.exe / .app are always built from src/UpdateToolkit and src/UpdateToolkitMac.
 dist/
+/UpdateToolkit.exe
+/UpdateToolkit.app/
+src/UpdateToolkit/UpdateToolkit.exe

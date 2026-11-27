@@ -9,6 +9,7 @@ import json
 import os
 import re
 import shutil
+import ssl
 import sys
 import time
 import urllib.error
@@ -72,8 +73,32 @@ class UpdateError(Exception):
 # HTTP helpers
 # ----------------------------------------------------------------------------
 
+# Trusted CAs = the OS store (on Windows, the ROOT/CA stores) + the Mozilla bundle shipped next to
+# these scripts. Windows only fills its root store on demand, so on a fresh or offline-installed
+# PC the OS store alone often lacks the roots for github.com, ubuntu.com etc. ("unable to get local
+# issuer certificate"). Refresh cacert.pem from https://curl.se/ca/cacert.pem (build.sh does).
+CA_FILE = os.path.join(SCRIPT_DIR, "cacert.pem")
+
+
+def _ssl_context():
+    ctx = ssl.create_default_context()
+    if os.path.isfile(CA_FILE):
+        try:
+            ctx.load_verify_locations(cafile=CA_FILE)
+        except (OSError, ssl.SSLError):
+            pass
+    return ctx
+
+
+SSL_CONTEXT = _ssl_context()
+
+
+def https_handler():
+    return urllib.request.HTTPSHandler(context=SSL_CONTEXT)
+
+
 def _opener(cookies=False):
-    handlers = []
+    handlers = [https_handler()]
     if cookies:
         handlers.append(urllib.request.HTTPCookieProcessor(CookieJar()))
     op = urllib.request.build_opener(*handlers)

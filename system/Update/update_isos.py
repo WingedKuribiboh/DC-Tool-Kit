@@ -222,6 +222,10 @@ def _ms_links():
             if err.get("Type") == 9:
                 raise UpdateError("Microsoft has temporarily blocked this IP (error 715-123130). "
                                   "Wait ~24h or try another network.")
+            if "sentinel" in str(err.get("Value", "")).lower():
+                raise UpdateError("Microsoft's bot protection (Sentinel) rejected the automated request. "
+                                  "Download the ISO by hand from https://www.microsoft.com/software-download/windows11 "
+                                  "and save it as ISO\\1-Windows Install\\Win11_x64.iso (or Win11_arm.iso).")
             raise UpdateError("Microsoft: " + str(err.get("Value")))
         for opt in r.get("ProductDownloadOptions", []):
             links[opt["DownloadType"]] = opt["Uri"]
@@ -300,7 +304,7 @@ def update_entry(entry, root, state, force=False, dry=False):
     path = os.path.join(root, entry["path"])
     try:
         status, latest = check_entry(entry, root, state)
-    except UpdateError as e:
+    except Exception as e:                             # one bad entry must not stop the rest
         print("[%-9s] %-20s ERROR resolving latest: %s" % (key, name, e))
         return False
 
